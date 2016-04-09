@@ -104,7 +104,7 @@ function onMovePlayer(data) {
     movePlayer.player.x = data.x;
     movePlayer.player.y = data.y;
     movePlayer.text = data.text;
-    console.log(movePlayer.text);
+//    console.log(movePlayer.text);
 }
 
 function onRemovePlayer(data) {
@@ -126,8 +126,7 @@ function update() {
         if (otherPlayers[i].alive) {
             otherPlayers[i].update();
             game.physics.arcade.collide(player, otherPlayers[i].player);
-                    console.log('heyyou');
-                    console.log(otherPlayers[i].text);
+                    console.log(otherPlayers[i].text + i);
             if (otherPlayers[i].text) {
                 blurb = otherPlayers[i].text;
 //                console.log(blurb);
