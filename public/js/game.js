@@ -3,7 +3,7 @@ var socket, space, player, otherPlayers, currentSpeed = 0, cursors;
 var text = null;
 var letGoOfW = 0;
 var windowHeight = window.innerWidth - 25; // To prevent scrollbars.
-var windowWidth = window.innerWidth - 25; // To prevetn scrollbars
+var windowWidth = window.innerWidth - 25; // To prevent scrollbars
 var publicText = '';
 
 var game = new Phaser.Game(windowWidth, windowHeight, Phaser.AUTO, '', {
@@ -120,17 +120,17 @@ function onRemovePlayer(data) {
 }
 
 function update() {
+    var style = { font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: player.width, align: "center", backgroundColor: "#ffff00" };
     for (var i = 0; i < otherPlayers.length; i++) {
         if (otherPlayers[i].alive) {
             otherPlayers[i].update();
             game.physics.arcade.collide(player, otherPlayers[i].player);
                     console.log(otherPlayers[i].text + i);
             if (otherPlayers[i].text) {
-                blurb = otherPlayers[i].text;
+                var blurb = otherPlayers[i].text;
 //                console.log(blurb);
                 if (blurb == 'this') {
                     console.log('hey');
-                    var style = { font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: player.width, align: "center", backgroundColor: "#ffff00" };
                     text = game.add.text(0, 0, "- text on a sprite -\ndrag me", style);
                     text.anchor.set(0.5);
                     publicText = 'this';
@@ -157,7 +157,6 @@ function update() {
     if (game.input.keyboard.isDown(Phaser.Keyboard.W)) {
         letGoOfW = 0;
         if (text == null) {
-            var style = { font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: player.width, align: "center", backgroundColor: "#ffff00" };
             text = game.add.text(0, 0, "- text on a sprite -\ndrag me", style);
             text.anchor.set(0.5);
             publicText = 'this';
