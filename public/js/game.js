@@ -5,6 +5,13 @@ var letGoOfW = 0;
 var windowHeight = window.innerWidth - 25; // To prevent scrollbars.
 var windowWidth = window.innerWidth - 25; // To prevent scrollbars
 var publicText = '';
+var emojiOnScreen;
+
+// Returns a random integer between min (included) and max (excluded)
+// Using Math.round() will give you a non-uniform distribution!
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
 
 var game = new Phaser.Game(windowWidth, windowHeight, Phaser.AUTO, '', {
     preload: preload,
@@ -17,6 +24,7 @@ function preload() {
     game.load.image('space', 'assets/space.png');
     game.load.spritesheet('ship', 'assets/ship.png', 64, 64);
     game.load.spritesheet('otherPlayer', 'assets/ship.png', 64, 64);
+    game.load.spritesheet('emoji', 'assets/emojiSpriteSheet-From-emojione.com.png', 64, 64);
 }
 
 function create() {
@@ -38,6 +46,10 @@ function create() {
     game.physics.enable(player, Phaser.Physics.ARCADE);
     player.body.maxVelocity.setTo(400, 400);
     player.body.collideWorldBounds = true;
+
+    // Emoji Test
+    var pickAnEmoji = getRandomInt(0, 1639);
+    emojiOnScreen = game.add.sprite(startX + 10, startY + 10, 'emoji', pickAnEmoji);
 
     otherPlayers = [];
 
