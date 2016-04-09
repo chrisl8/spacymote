@@ -5,7 +5,7 @@ var letGoOfW = 0;
 var windowHeight = window.innerWidth - 25; // To prevent scrollbars.
 var windowWidth = window.innerWidth - 25; // To prevetn scrollbars
 
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
+var game = new Phaser.Game(windowWidth, windowHeight, Phaser.AUTO, '', {
     preload: preload,
     create: create,
     update: update,
