@@ -7,6 +7,8 @@ var windowWidth = window.innerWidth - 25; // To prevent scrollbars
 var publicText = '';
 var emojiOnScreen;
 var emojiPicker;
+var otherTexts = [];
+var superText = null;
 
 // Returns a random integer between min (included) and max (excluded)
 // Using Math.round() will give you a non-uniform distribution!
@@ -168,17 +170,16 @@ function update() {
         if (otherPlayers[i].alive) {
             otherPlayers[i].update();
             game.physics.arcade.collide(player, otherPlayers[i].player);
-                    console.log(otherPlayers[i].text + i);
-            if (otherPlayers[i].text) {
-                var blurb = otherPlayers[i].text;
-//                console.log(blurb);
-                if (blurb == 'this') {
-                    console.log('hey');
-                    text = game.add.text(0, 0, "- text on a sprite -\ndrag me", style);
-                    text.anchor.set(0.5);
-                    publicText = 'this';
-
-                }
+//            console.log(otherPlayers[i].text + i);
+            if (otherPlayers[i].text && otherTexts[i] == null && otherPlayers[i].text != 'new') {
+                blurb = otherPlayers[i].text;
+                otherTexts[i] = game.add.text(0, 0, '\uD83D\uDC2C', style);
+                otherTexts[i].anchor.set(0.5);
+                otherTexts[i].x = Math.floor(otherPlayers[i].player.x + otherPlayers[i].player.width / 2);
+                otherTexts[i].y = Math.floor(otherPlayers[i].player.y + otherPlayers[i].player.height / 2);
+            } else if (otherTexts[i] != null && otherPlayers[i].text == '') {
+                otherTexts[i].destroy();
+                otherTexts[i] = null;
             }
         }
     }
@@ -200,7 +201,7 @@ function update() {
     if (game.input.keyboard.isDown(Phaser.Keyboard.W)) {
         letGoOfW = 0;
         if (text == null) {
-            text = game.add.text(0, 0, "- text on a sprite -\ndrag me", style);
+            text = game.add.text(0, 0, '\uD83D\uDC2C', style);
             text.anchor.set(0.5);
             publicText = 'this';
         }
