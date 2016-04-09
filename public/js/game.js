@@ -4,6 +4,7 @@ var text = null;
 var letGoOfW = 0;
 var windowHeight = window.innerWidth - 25; // To prevent scrollbars.
 var windowWidth = window.innerWidth - 25; // To prevetn scrollbars
+var publicText = '';
 
 var game = new Phaser.Game(windowWidth, windowHeight, Phaser.AUTO, '', {
     preload: preload,
@@ -68,7 +69,7 @@ function onSocketConnected() {
     });
     otherPlayers = [];
 
-    socket.emit('new player', {x: player.x, y: player.y, text:text});
+    socket.emit('new player', {x: player.x, y: player.y, text: publicText});
 }
 
 function onSocketDisconnect() {
@@ -122,8 +123,8 @@ function update() {
             otherPlayers[i].update();
             game.physics.arcade.collide(player, otherPlayers[i].player);
             if (otherPlayers[i].text) {
-                text = otherPlayers[i].text;
-                console.log(otherPlayers[i].text);
+                blurb = otherPlayers[i].text;
+                console.log(blurb);
             }
         }
     }
@@ -148,12 +149,14 @@ function update() {
             var style = { font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: player.width, align: "center", backgroundColor: "#ffff00" };
             text = game.add.text(0, 0, "- text on a sprite -\ndrag me", style);
             text.anchor.set(0.5);
+            publicText = 'this';
         }
     } else {letGoOfW++;}
         
     if (letGoOfW > 20) {
         if (text != null) {
             text.destroy();
+            publicText = '';
         }
         text = null;
     }
@@ -181,7 +184,7 @@ function update() {
         }
     }
 
-    socket.emit('move player', {x: player.x, y: player.y});
+    socket.emit('move player', {x: player.x, y: player.y, text: publicText});
 }
 
 function render() {

@@ -40,6 +40,7 @@ function onClientDisconnect() {
 }
 
 function onNewPlayer(data) {
+    console.log(data);
     var newPlayer = new Player(data.x, data.y);
     newPlayer.id = this.id;
 
@@ -65,7 +66,8 @@ function onMovePlayer(data) {
     movePlayer.setX(data.x);
     movePlayer.setY(data.y);
 
-    this.broadcast.emit('move player', {id: movePlayer.id, x: movePlayer.getX(), y: movePlayer.getY()});
+    console.log(data);
+    this.broadcast.emit('move player', {id: movePlayer.id, x: movePlayer.getX(), y: movePlayer.getY(), text:'hello'});
 }
 
 function playerById(id) {
