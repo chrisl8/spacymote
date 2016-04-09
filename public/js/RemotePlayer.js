@@ -1,6 +1,7 @@
 var RemotePlayer = function (index, game, player, startX, startY) {
     var x = startX;
     var y = startY;
+    var text;
 
     this.game = game;
     this.health = 3;
