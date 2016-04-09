@@ -1,4 +1,7 @@
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
+var windowHeight = window.innerWidth - 25; // To prevent scrollbars.
+var windowWidth = window.innerWidth - 25; // To prevetn scrollbars
+
+var game = new Phaser.Game(windowWidth, windowHeight, Phaser.AUTO, '', {
     preload: preload,
     create: create,
     update: update,
@@ -18,7 +21,7 @@ function create() {
 
     game.world.setBounds(-500, -500, 10000, 10000);
 
-    space = game.add.tileSprite(0, 0, 800, 600, 'space');
+    space = game.add.tileSprite(0, 0, windowWidth, windowHeight, 'space');
     space.fixedToCamera = true;
 
     var startX = Math.round(Math.random() * 1000 - 500);
