@@ -133,11 +133,11 @@ function onRemovePlayer(data) {
     otherPlayers.splice(otherPlayers.indexOf(removePlayer), 1);
 }
 function interact(a, b) {
-    isInteracting = true
         if(!isInteracting) {
             console.log('interaction');
             
         }
+    isInteracting = true
 }
 
 function update() {
