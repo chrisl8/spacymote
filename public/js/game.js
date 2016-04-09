@@ -132,17 +132,23 @@ function onRemovePlayer(data) {
 
     otherPlayers.splice(otherPlayers.indexOf(removePlayer), 1);
 }
+function interact(a, b) {
+    isInteracting = true
+        if(!isInteracting) {
+            console.log('interaction');
+            
+        }
+}
 
 function update() {
-    var style = { font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: player.width, align: "center", backgroundColor: "#ffff00" };
     for (var i = 0; i < otherPlayers.length; i++) {
         if (otherPlayers[i].alive) {
             otherPlayers[i].update();
-            game.physics.arcade.collide(player, otherPlayers[i].player);
+            game.physics.arcade.collide(player, otherPlayers[i].player, interact);
 //            console.log(otherPlayers[i].text + i);
             if (otherPlayers[i].text && otherTexts[i] == null && otherPlayers[i].text != 'new') {
                 blurb = otherPlayers[i].text;
-                otherTexts[i] = game.add.text(0, 0, '\uD83D\uDC2C', style);
+                otherTexts[i] = game.add.sprite(0, 0, 'emoji', blurb);
                 otherTexts[i].anchor.set(0.5);
                 otherTexts[i].x = Math.floor(otherPlayers[i].player.x + otherPlayers[i].player.width / 2);
                 otherTexts[i].y = Math.floor(otherPlayers[i].player.y + otherPlayers[i].player.height / 2);
@@ -170,9 +176,9 @@ function update() {
     if (game.input.keyboard.isDown(Phaser.Keyboard.W)) {
         letGoOfW = 0;
         if (text == null) {
-            text = game.add.text(0, 0, '\uD83D\uDC2C', style);
+            publicText = getRandomInt(0, 1639);
+            text = game.add.sprite(0, 0, 'emoji', publicText);
             text.anchor.set(0.5);
-            publicText = 'this';
         }
     } else {letGoOfW++;}
         
