@@ -6,11 +6,16 @@ var windowHeight = window.innerWidth - 25; // To prevent scrollbars.
 var windowWidth = window.innerWidth - 25; // To prevent scrollbars
 var publicText = '';
 var emojiOnScreen;
+var emojiPicker;
 
 // Returns a random integer between min (included) and max (excluded)
 // Using Math.round() will give you a non-uniform distribution!
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
+}
+
+function pickAnEmojiForMe() {
+    return getRandomInt(0, 1639);
 }
 
 var game = new Phaser.Game(windowWidth, windowHeight, Phaser.AUTO, '', {
@@ -30,13 +35,14 @@ function preload() {
 function create() {
     socket = io.connect();
 
-    game.world.setBounds(-500, -500, 10000, 10000);
+    var worldSize = 10500;
+    game.world.setBounds(0, 0, worldSize, worldSize);
 
     space = game.add.tileSprite(0, 0, windowWidth, windowHeight, 'space');
     space.fixedToCamera = true;
 
-    var startX = Math.round(Math.random() * 1000 - 500);
-    var startY = Math.round(Math.random() * 1000 - 500);
+    var startX = Math.round(Math.random() * worldSize);
+    var startY = Math.round(Math.random() * worldSize);
     player = game.add.sprite(startX, startY, 'ship');
     player.anchor.setTo(0.5, 0.5);
     player.animations.add('move', [0, 1, 2, 3, 4, 5, 6, 7], 20, true);
@@ -46,10 +52,6 @@ function create() {
     game.physics.enable(player, Phaser.Physics.ARCADE);
     player.body.maxVelocity.setTo(400, 400);
     player.body.collideWorldBounds = true;
-
-    // Emoji Test
-    var pickAnEmoji = getRandomInt(0, 1639);
-    emojiOnScreen = game.add.sprite(startX + 10, startY + 10, 'emoji', pickAnEmoji);
 
     otherPlayers = [];
 
@@ -62,6 +64,35 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
 
     setEventHandlers();
+    setTimeout(function() {
+        displayEmojiPicker();
+    }, 1000);
+}
+
+var counter = 0;
+function displayEmojiPicker() {
+    // Emoji Picker Test
+    var gridOffset = 70;
+    var emojiPickerX = Math.floor(player.x + player.width / 2);
+    var emojiPickerY = Math.floor(player.y + player.height / 2);
+    emojiPicker = game.add.group();
+    var sprite1 = emojiPicker.create(emojiPickerX, emojiPickerY, 'emoji', pickAnEmojiForMe());
+    var sprite2 = emojiPicker.create(emojiPickerX + gridOffset, emojiPickerY, 'emoji', pickAnEmojiForMe());
+
+    //  Enables all kind of input actions on this image (click, etc)
+    sprite1.inputEnabled = true;
+    sprite2.inputEnabled = true;
+    sprite1.events.onInputDown.addOnce(emojiPickerClicker, this);
+    sprite2.events.onInputDown.addOnce(emojiPickerClicker, this);
+}
+
+function emojiPickerClicker () {
+
+    counter++;
+    console.log(counter);
+    emojiPicker.destroy();
+
+
 }
 
 var setEventHandlers = function() {
