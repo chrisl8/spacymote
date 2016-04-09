@@ -16,7 +16,7 @@ var socket, space, player, otherPlayers, currentSpeed = 0, cursors;
 function create() {
     socket = io.connect();
 
-    game.world.setBounds(-500, -500, 1000, 1000);
+    game.world.setBounds(-500, -500, 10000, 10000);
 
     space = game.add.tileSprite(0, 0, 800, 600, 'space');
     space.fixedToCamera = true;
@@ -28,7 +28,7 @@ function create() {
     player.animations.add('move', [0, 1, 2, 3, 4, 5, 6, 7], 20, true);
     player.animations.add('stop', [3], 20, true);
 
-    // Thsi will force it to decelerate and limit its speed
+    // This will force it to decelerate and limit its speed
     game.physics.enable(player, Phaser.Physics.ARCADE);
     player.body.maxVelocity.setTo(400, 400);
     player.body.collideWorldBounds = true;
@@ -132,6 +132,7 @@ function update() {
             currentSpeed -= 4;
         }
     }
+    //emote
 
     game.physics.arcade.velocityFromRotation(player.rotation, currentSpeed, player.body.velocity);
 
