@@ -3,6 +3,8 @@ var socket, space, player, otherPlayers, currentSpeed = 0, cursors;
 var text = null;
 var publicText = '';
 letGoOfW = 0;
+var otherTexts = [];
+var superText = null;
 
 
 
@@ -126,18 +128,16 @@ function update() {
         if (otherPlayers[i].alive) {
             otherPlayers[i].update();
             game.physics.arcade.collide(player, otherPlayers[i].player);
-                    console.log(otherPlayers[i].text + i);
-            if (otherPlayers[i].text) {
+            console.log(otherPlayers[i].text + i);
+            if (otherPlayers[i].text && superText == null && otherPlayers[i].text != 'new') {
+                console.log('HEYYYYY');
                 blurb = otherPlayers[i].text;
-//                console.log(blurb);
-                if (blurb == 'this') {
-                    console.log('hey');
-                    var style = { font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: player.width, align: "center", backgroundColor: "#ffff00" };
-                    text = game.add.text(0, 0, "- text on a sprite -\ndrag me", style);
-                    text.anchor.set(0.5);
-                    publicText = 'this';
-
-                }
+                console.log(blurb);
+                var style = { font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: player.width, align: "center", backgroundColor: "#ffff00" };
+                superText = game.add.text(0, 0, '\uD83D\uDC2C', style);
+                superText.anchor.set(0.5);
+                superText.x = Math.floor(player.x + player.width / 2);
+                superText.y = Math.floor(player.y + player.height / 2);
             }
         }
     }
@@ -160,7 +160,7 @@ function update() {
         letGoOfW = 0;
         if (text == null) {
             var style = { font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: player.width, align: "center", backgroundColor: "#ffff00" };
-            text = game.add.text(0, 0, "- text on a sprite -\ndrag me", style);
+            text = game.add.text(0, 0, '\uD83D\uDC2C', style);
             text.anchor.set(0.5);
             publicText = 'this';
         }
