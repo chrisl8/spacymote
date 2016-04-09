@@ -1,7 +1,6 @@
 //here be globals
 var socket, space, player, otherPlayers, currentSpeed = 0, cursors;
 var text = null;
-var letGoOfW = 0;
 var windowHeight = window.innerWidth - 25; // To prevent scrollbars.
 var windowWidth = window.innerWidth - 25; // To prevent scrollbars
 var publicText = '';
@@ -138,7 +137,17 @@ function onRemovePlayer(data) {
 function interact(a, b) {
         if(!isInteracting) {
             console.log('interaction');
-            
+            publicText = getRandomInt(0, 1639);
+            text = game.add.sprite(0, 0, 'emoji', publicText);
+            text.anchor.set(0.5);
+            setTimeout(function () {
+                console.log('NOTICE ME SENPAI');
+                console.log(publicText);
+                text.destroy();
+                text = null;
+                publicText = '';
+                isInteracting = false;
+            }, 1000);
         }
     isInteracting = true
 }
@@ -181,23 +190,7 @@ function update() {
             currentSpeed -= 4;
         }
     }
-    //emote
-    if (game.input.keyboard.isDown(Phaser.Keyboard.W)) {
-        letGoOfW = 0;
-        if (text == null) {
-            publicText = getRandomInt(0, 1639);
-            text = game.add.sprite(0, 0, 'emoji', publicText);
-            text.anchor.set(0.5);
-        }
-    } else {letGoOfW++;}
         
-    if (letGoOfW > 20) {
-        if (text != null) {
-            text.destroy();
-            publicText = '';
-        }
-        text = null;
-    }
     if (text != null) {
         text.x = Math.floor(player.x + player.width / 2);
         text.y = Math.floor(player.y + player.height / 2);
