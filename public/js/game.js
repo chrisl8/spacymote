@@ -101,8 +101,8 @@ function onMovePlayer(data) {
 
     movePlayer.player.x = data.x;
     movePlayer.player.y = data.y;
-    movePlayer.player.text = data.text;
-//    console.log(movePlayer.player.text);
+    movePlayer.text = data.text;
+    console.log(movePlayer.text);
 }
 
 function onRemovePlayer(data) {
@@ -125,9 +125,10 @@ function update() {
             otherPlayers[i].update();
             game.physics.arcade.collide(player, otherPlayers[i].player);
                     console.log('heyyou');
+                    console.log(otherPlayers[i].text);
             if (otherPlayers[i].text) {
                 blurb = otherPlayers[i].text;
-                console.log(blurb);
+//                console.log(blurb);
                 if (blurb == 'this') {
                     console.log('hey');
                     var style = { font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: player.width, align: "center", backgroundColor: "#ffff00" };
