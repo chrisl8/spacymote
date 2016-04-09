@@ -128,16 +128,17 @@ function update() {
         if (otherPlayers[i].alive) {
             otherPlayers[i].update();
             game.physics.arcade.collide(player, otherPlayers[i].player);
-            console.log(otherPlayers[i].text + i);
-            if (otherPlayers[i].text && superText == null && otherPlayers[i].text != 'new') {
-                console.log('HEYYYYY');
+//            console.log(otherPlayers[i].text + i);
+            if (otherPlayers[i].text && otherTexts[i] == null && otherPlayers[i].text != 'new') {
                 blurb = otherPlayers[i].text;
-                console.log(blurb);
                 var style = { font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: player.width, align: "center", backgroundColor: "#ffff00" };
-                superText = game.add.text(0, 0, '\uD83D\uDC2C', style);
-                superText.anchor.set(0.5);
-                superText.x = Math.floor(player.x + player.width / 2);
-                superText.y = Math.floor(player.y + player.height / 2);
+                otherTexts[i] = game.add.text(0, 0, '\uD83D\uDC2C', style);
+                otherTexts[i].anchor.set(0.5);
+                otherTexts[i].x = Math.floor(otherPlayers[i].player.x + otherPlayers[i].player.width / 2);
+                otherTexts[i].y = Math.floor(otherPlayers[i].player.y + otherPlayers[i].player.height / 2);
+            } else if (otherTexts[i] != null && otherPlayers[i].text == '') {
+                otherTexts[i].destroy();
+                otherTexts[i] = null;
             }
         }
     }
