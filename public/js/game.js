@@ -103,6 +103,8 @@ function onMovePlayer(data) {
 
     movePlayer.player.x = data.x;
     movePlayer.player.y = data.y;
+    movePlayer.player.text = data.text;
+//    console.log(movePlayer.player.text);
 }
 
 function onRemovePlayer(data) {
@@ -124,9 +126,18 @@ function update() {
         if (otherPlayers[i].alive) {
             otherPlayers[i].update();
             game.physics.arcade.collide(player, otherPlayers[i].player);
+                    console.log('heyyou');
             if (otherPlayers[i].text) {
                 blurb = otherPlayers[i].text;
                 console.log(blurb);
+                if (blurb == 'this') {
+                    console.log('hey');
+                    var style = { font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: player.width, align: "center", backgroundColor: "#ffff00" };
+                    text = game.add.text(0, 0, "- text on a sprite -\ndrag me", style);
+                    text.anchor.set(0.5);
+                    publicText = 'this';
+
+                }
             }
         }
     }
