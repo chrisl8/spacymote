@@ -1,0 +1,20 @@
+{
+  "name": "phaser-multiplayer-starter",
+  "version": "1.0.0",
+  "description": "A Phaser.io multiplayer starter package",
+  "main": "index.js",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon ."
+  },
+  "author": "Chris L8",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.13.4",
+    "phaser": "^2.4.6",
+    "socket.io": "^1.4.5"
+  },
+  "devDependencies": {
+    "nodemon": "^1.9.1"
+  }
+}
