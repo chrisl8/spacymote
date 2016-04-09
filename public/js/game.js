@@ -7,6 +7,8 @@ var windowWidth = window.innerWidth - 25; // To prevent scrollbars
 var publicText = '';
 var emojiOnScreen;
 var otherTexts = [];
+var emojiStory = [];
+var emojiIndex = 0;
 var superText = null;
 var isInteracting = false;
 
@@ -149,6 +151,12 @@ function update() {
 //            console.log(otherPlayers[i].text + i);
             if (otherPlayers[i].text && otherTexts[i] == null && otherPlayers[i].text != 'new') {
                 blurb = otherPlayers[i].text;
+                emojiStory[emojiIndex] = game.add.sprite(0, 0, 'emoji', blurb);
+                emojiStory[emojiIndex].x = (emojiIndex * 65) + 32;
+                emojiStory[emojiIndex].y = 32;
+                emojiStory[emojiIndex].fixedToCamera = true;
+                emojiIndex++;
+                
                 otherTexts[i] = game.add.sprite(0, 0, 'emoji', blurb);
                 otherTexts[i].anchor.set(0.5);
                 otherTexts[i].x = Math.floor(otherPlayers[i].player.x + otherPlayers[i].player.width / 2);
