@@ -68,35 +68,37 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
 
     setEventHandlers();
-    setTimeout(function() {
-        displayEmojiPicker();
-    }, 1000);
 }
 
 var counter = 0;
-function displayEmojiPicker() {
-    // Emoji Picker Test
-    var gridOffset = 70;
-    var emojiPickerX = Math.floor(player.x + player.width / 2);
-    var emojiPickerY = Math.floor(player.y + player.height / 2);
-    emojiPicker = game.add.group();
-    var sprite1 = emojiPicker.create(emojiPickerX, emojiPickerY, 'emoji', pickAnEmojiForMe());
-    var sprite2 = emojiPicker.create(emojiPickerX + gridOffset, emojiPickerY, 'emoji', pickAnEmojiForMe());
+var emojiPickerActive = false;
+function displayEmojiPicker(a, b) {
+    if (!emojiPickerActive) {
+        emojiPickerActive = true;
+        // Emoji Picker Test
+        var gridOffset = 70;
+        var emojiPickerX = Math.floor(player.x + player.width / 2);
+        var emojiPickerY = Math.floor(player.y + player.height / 2);
+        emojiPicker = game.add.group();
+        var emoji1 = pickAnEmojiForMe();
+        var emoji2 = pickAnEmojiForMe();
+        var sprite1 = emojiPicker.create(emojiPickerX, emojiPickerY, 'emoji', emoji1);
+        var sprite2 = emojiPicker.create(emojiPickerX + gridOffset, emojiPickerY, 'emoji', emoji2);
 
-    //  Enables all kind of input actions on this image (click, etc)
-    sprite1.inputEnabled = true;
-    sprite2.inputEnabled = true;
-    sprite1.events.onInputDown.addOnce(emojiPickerClicker, this);
-    sprite2.events.onInputDown.addOnce(emojiPickerClicker, this);
+        //  Enables all kind of input actions on this image (click, etc)
+        sprite1.inputEnabled = true;
+        sprite2.inputEnabled = true;
+        sprite1.events.onInputDown.addOnce(emojiPickerClicker, this, 0, emoji1, a, b);
+        sprite2.events.onInputDown.addOnce(emojiPickerClicker, this, 0, emoji2, a, b);
+    }
 }
 
-function emojiPickerClicker () {
+function emojiPickerClicker (context, otherThing, emojiNumber, a, b) {
 
-    counter++;
-    console.log(counter);
+    interact(a, b, emojiNumber)
+    console.log(emojiNumber);
     emojiPicker.destroy();
-
-
+    emojiPickerActive = false;
 }
 
 var setEventHandlers = function() {
@@ -165,10 +167,10 @@ function onRemovePlayer(data) {
 
     otherPlayers.splice(otherPlayers.indexOf(removePlayer), 1);
 }
-function interact(a, b) {
+function interact(a, b, emojiNumber) {
         if(!isInteracting) {
             console.log('interaction');
-            publicText = getRandomInt(0, 1639);
+            publicText = emojiNumber;
             text = game.add.sprite(0, 0, 'emoji', publicText);
             text.anchor.set(0.5);
             setTimeout(function () {
@@ -187,7 +189,7 @@ function update() {
     for (var i = 0; i < otherPlayers.length; i++) {
         if (otherPlayers[i].alive) {
             otherPlayers[i].update();
-            game.physics.arcade.collide(player, otherPlayers[i].player, interact);
+            game.physics.arcade.collide(player, otherPlayers[i].player, displayEmojiPicker);
 //            console.log(otherPlayers[i].text + i);
             if (otherPlayers[i].text && otherTexts[i] == null && otherPlayers[i].text != 'new') {
                 blurb = otherPlayers[i].text;
