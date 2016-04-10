@@ -78,7 +78,6 @@ function onReceiveEmoji(data) {
         return
     }
 
-    console.log(data);
     var sentToPlayer = playerById(data.to);
 
     if (!sentToPlayer) {
