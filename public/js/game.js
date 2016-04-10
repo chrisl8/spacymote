@@ -1,5 +1,6 @@
 //here be globals
-var socket, space, player, otherPlayers, currentSpeed = 0, cursors;
+var socket, space, player, currentSpeed = 0, cursors;
+var otherPlayers = [];
 var text = null;
 var windowHeight = window.innerHeight; // To prevent scrollbars.
 var windowWidth = window.innerWidth; // To prevent scrollbars.
@@ -11,7 +12,6 @@ var emojiStory = [];
 var emojiIndex = 0;
 var superText = null;
 var isInteracting = false;
-var corg = false; //this is the cheat thing
 
 // Returns a random integer between min (included) and max (excluded)
 // Using Math.round() will give you a non-uniform distribution!
@@ -40,7 +40,7 @@ function preload() {
 function create() {
     socket = io.connect();
 
-    var worldSize = 10500;
+    var worldSize = 5000;
     game.world.setBounds(0, 0, worldSize, worldSize);
 
     space = game.add.tileSprite(0, 0, windowWidth, windowHeight, 'space');
@@ -159,6 +159,7 @@ function onNewPlayer(data) {
 
     // Add new player to the remote players array
     otherPlayers.push(new RemotePlayer(data.id, game, player, data.x, data.y));
+    game.world.setBounds(0, 0, 5000 + 1000*otherPlayers.length, 5000 + 1000*otherPlayers.length);
 }
 
 function onMovePlayer(data) {
@@ -186,6 +187,7 @@ function onRemovePlayer(data) {
     }
 
     removePlayer.player.kill();
+    game.world.setBounds(0, 0, 5000 + 1000*otherPlayers.length, 5000 + 1000*otherPlayers.length);
 
     otherPlayers.splice(otherPlayers.indexOf(removePlayer), 1);
 }
