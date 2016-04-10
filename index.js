@@ -22,6 +22,8 @@ function onSocketConnection(client) {
     client.on('new player', onNewPlayer);
 
     client.on('move player', onMovePlayer);
+
+    client.on('send emoji', onReceiveEmoji);
 }
 
 function onClientDisconnect() {
@@ -40,7 +42,6 @@ function onClientDisconnect() {
 }
 
 function onNewPlayer(data) {
-    console.log(data);
     var newPlayer = new Player(data.x, data.y);
     newPlayer.id = this.id;
 
@@ -66,7 +67,20 @@ function onMovePlayer(data) {
     movePlayer.setX(data.x);
     movePlayer.setY(data.y);
 
-    this.broadcast.emit('move player', {id: movePlayer.id, x: movePlayer.getX(), y: movePlayer.getY(), text: data.text});
+    this.broadcast.emit('move player', {id: movePlayer.id, x: movePlayer.getX(), y: movePlayer.getY()});
+}
+
+function onReceiveEmoji(data) {
+    console.log(data);
+    var sentToPlayer = playerById(data.to);
+
+    if (!sentToPlayer) {
+        console.log('Receiving player not found: ' + this.id);
+        return
+    }
+
+    this.broadcast.emit('here is an emoji', {id: sentToPlayer.id, text: data.text});
+
 }
 
 function playerById(id) {
