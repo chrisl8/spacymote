@@ -81,14 +81,32 @@ function displayEmojiPicker(a, b) {
         emojiPicker.position.copyFrom(player.position);
         var emoji1 = pickAnEmojiForMe();
         var emoji2 = pickAnEmojiForMe();
+        var emoji3 = pickAnEmojiForMe();
+        var emoji4 = pickAnEmojiForMe();
+        var emoji5 = pickAnEmojiForMe();
+        var emoji6 = pickAnEmojiForMe();
         var sprite1 = emojiPicker.create(player.width / 2, player.height / 2, 'emoji', emoji1);
         var sprite2 = emojiPicker.create(player.width / 2 + gridOffset, player.height / 2, 'emoji', emoji2);
 
+        var sprite3 = emojiPicker.create(player.width / 2, player.height / 2 + gridOffset, 'emoji', emoji3);
+        var sprite4 = emojiPicker.create(player.width / 2 + gridOffset, player.height / 2 + gridOffset, 'emoji', emoji4);
+
+        var sprite5 = emojiPicker.create(player.width / 2, player.height / 2 + (gridOffset * 2), 'emoji', emoji5);
+        var sprite6 = emojiPicker.create(player.width / 2 + gridOffset, player.height / 2 + (gridOffset * 2), 'emoji', emoji6);
+
         //  Enables all kind of input actions on this image (click, etc)
         sprite1.inputEnabled = true;
-        sprite2.inputEnabled = true;
         sprite1.events.onInputDown.addOnce(emojiPickerClicker, this, 0, emoji1, a, b);
+        sprite2.inputEnabled = true;
         sprite2.events.onInputDown.addOnce(emojiPickerClicker, this, 0, emoji2, a, b);
+        sprite3.inputEnabled = true;
+        sprite3.events.onInputDown.addOnce(emojiPickerClicker, this, 0, emoji3, a, b);
+        sprite4.inputEnabled = true;
+        sprite4.events.onInputDown.addOnce(emojiPickerClicker, this, 0, emoji4, a, b);
+        sprite5.inputEnabled = true;
+        sprite5.events.onInputDown.addOnce(emojiPickerClicker, this, 0, emoji5, a, b);
+        sprite6.inputEnabled = true;
+        sprite6.events.onInputDown.addOnce(emojiPickerClicker, this, 0, emoji6, a, b);
 
         emojiPicker.update = function() {
             this.position.copyFrom(player);
