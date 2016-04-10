@@ -111,20 +111,20 @@ function displayEmojiPicker(a, b) {
         sprite6.inputEnabled = true;
         sprite6.events.onInputDown.addOnce(emojiPickerClicker, this, 0, emoji6, a, b);
 
-        emojiPicker.update = function() {
+        emojiPicker.update = function () {
             this.position.copyFrom(player);
         }
     }
 }
 
-function emojiPickerClicker (context, otherThing, emojiNumber, a, b) {
+function emojiPickerClicker(context, otherThing, emojiNumber, a, b) {
 
     interact(a, b, emojiNumber)
     emojiPicker.destroy();
     emojiPickerActive = false;
 }
 
-var setEventHandlers = function() {
+var setEventHandlers = function () {
     socket.on('connect', onSocketConnected);
     socket.on('disconnect', onSocketDisconnect);
     socket.on('new player', onNewPlayer);
@@ -161,12 +161,52 @@ function onNewPlayer(data) {
 
     // Add new player to the remote players array
     otherPlayers.push(new RemotePlayer(data.id, game, player, data.x, data.y));
-    game.world.setBounds(0, 0, 5000 + 1000*otherPlayers.length, 5000 + 1000*otherPlayers.length);
+    game.world.setBounds(0, 0, 5000 + 1000 * otherPlayers.length, 5000 + 1000 * otherPlayers.length);
 }
 
 function onNewEmojiReceived(data) {
+    var fromPlayer = playerById(data.from);
+
+    // Missing player
+    if (!fromPlayer) {
+        console.log('Player not found: ', data.from);
+        return;
+    }
+    
     if (data.id.indexOf(socket.io.engine.id) > -1) {
-        console.log(data.text);
+        emojiStory[emojiIndex] = game.add.sprite(0, 0, 'emoji', data.text);
+
+        if ((emojiIndex * 65) + 20 < game.width - 100) {
+            emojiStory[emojiIndex].x = (emojiIndex * 65) + 20;
+            emojiStory[emojiIndex].y = 32;
+        } else if ((emojiIndex * 65) + 20 < (game.width + game.height) - 100) {
+            console.log('two');
+            emojiStory[emojiIndex].x = (game.width - 32);
+            emojiStory[emojiIndex].y = ((emojiIndex * 65) - (game.width - 70) + 32);
+        } else if ((emojiIndex * 65) + 20 < ((game.width * 2) + game.height) - 100) {
+            console.log('three');
+            emojiStory[emojiIndex].x = ((emojiIndex * 65) + 20) - (game.width + game.height);
+            emojiStory[emojiIndex].y = game.height - 32;
+        } else if ((emojiIndex * 65) + 20 < ((game.width * 2) + (game.height * 2)) - 100) {
+            console.log('four');
+            emojiStory[emojiIndex].x = 32;
+            emojiStory[emojiIndex].y = ((emojiIndex * 65) - (2 * game.width + game.height));
+//                        emojiStory[emojiIndex].y = ((emojiIndex * 65) - (game.width -70)-(game.height+(2*game.width)));
+        } else {
+            console.log('Notice me, Senpai!');
+        }
+
+        emojiStory[emojiIndex].fixedToCamera = true;
+        emojiIndex++;
+
+    //     var i = 1;
+    //     otherTexts[i] = game.add.sprite(0, 0, 'emoji', data.text);
+    //     otherTexts[i].anchor.set(0.5);
+    //     otherTexts[i].x = Math.floor(fromPlayer.player.x + fromPlayer.player.width / 2);
+    //     otherTexts[i].y = Math.floor(fromPlayer.player.y + fromPlayer.player.height / 2);
+    // } else if (otherTexts[i] != null && fromPlayer.text == '') {
+    //     otherTexts[i].destroy();
+    //     otherTexts[i] = null;
     }
 }
 
@@ -193,21 +233,21 @@ function onRemovePlayer(data) {
     }
 
     removePlayer.player.kill();
-    game.world.setBounds(0, 0, 5000 + 1000*otherPlayers.length, 5000 + 1000*otherPlayers.length);
+    game.world.setBounds(0, 0, 5000 + 1000 * otherPlayers.length, 5000 + 1000 * otherPlayers.length);
 
     otherPlayers.splice(otherPlayers.indexOf(removePlayer), 1);
 }
 function interact(a, b, emojiNumber) {
-        if(!isInteracting) {
-            socket.emit('send emoji', {to: b.name, text: emojiNumber});
-            text = game.add.sprite(0, 0, 'emoji', emojiNumber);
-            text.anchor.set(0.5);
-            setTimeout(function () {
-                text.destroy();
-                text = null;
-                isInteracting = false;
-            }, 1000);
-        }
+    if (!isInteracting) {
+        socket.emit('send emoji', {to: b.name, text: emojiNumber});
+        text = game.add.sprite(0, 0, 'emoji', emojiNumber);
+        text.anchor.set(0.5);
+        setTimeout(function () {
+            text.destroy();
+            text = null;
+            isInteracting = false;
+        }, 1000);
+    }
     isInteracting = true
 }
 
@@ -216,39 +256,6 @@ function update() {
         if (otherPlayers[i].alive) {
             otherPlayers[i].update();
             game.physics.arcade.collide(player, otherPlayers[i].player, displayEmojiPicker);
-            if (otherPlayers[i].text && otherTexts[i] == null && otherPlayers[i].text != 'new') {
-                blurb = otherPlayers[i].text;
-                emojiStory[emojiIndex] = game.add.sprite(0, 0, 'emoji', blurb);
-
-                    if((emojiIndex*65)+20 < game.width - 100) {
-                        emojiStory[emojiIndex].x = (emojiIndex * 65) + 20;
-                        emojiStory[emojiIndex].y = 32;
-                    } else if((emojiIndex*65)+20 < (game.width+game.height) - 100){
-                        console.log('two');
-                        emojiStory[emojiIndex].x = (game.width - 32);
-                        emojiStory[emojiIndex].y = ((emojiIndex * 65) - (game.width -70)+32);
-                    } else if((emojiIndex*65)+20 < ((game.width*2)+game.height) - 100){
-                        console.log('three');
-                        emojiStory[emojiIndex].x = ((emojiIndex * 65) + 20)-(game.width + game.height);
-                        emojiStory[emojiIndex].y = game.height - 32;
-                    } else if((emojiIndex*65)+20 < ((game.width*2)+(game.height*2)) -100){
-                        console.log('four');
-                        emojiStory[emojiIndex].x = 32;
-                        emojiStory[emojiIndex].y = ((emojiIndex * 65) - (2*game.width + game.height)) ;
-//                        emojiStory[emojiIndex].y = ((emojiIndex * 65) - (game.width -70)-(game.height+(2*game.width)));
-                    } else {console.log('Notice me, Senpai!');}
-
-                emojiStory[emojiIndex].fixedToCamera = true;
-                emojiIndex++;
-                
-                otherTexts[i] = game.add.sprite(0, 0, 'emoji', blurb);
-                otherTexts[i].anchor.set(0.5);
-                otherTexts[i].x = Math.floor(otherPlayers[i].player.x + otherPlayers[i].player.width / 2);
-                otherTexts[i].y = Math.floor(otherPlayers[i].player.y + otherPlayers[i].player.height / 2);
-            } else if (otherTexts[i] != null && otherPlayers[i].text == '') {
-                otherTexts[i].destroy();
-                otherTexts[i] = null;
-            }
         }
     }
 
@@ -265,12 +272,12 @@ function update() {
             currentSpeed -= 4;
         }
     }
-        
+
     if (text != null) {
         text.x = Math.floor(player.x + player.width / 2);
         text.y = Math.floor(player.y + player.height / 2);
     }
-    
+
     game.physics.arcade.velocityFromRotation(player.rotation, currentSpeed, player.body.velocity);
 
     if (currentSpeed > 0) {

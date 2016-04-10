@@ -71,6 +71,13 @@ function onMovePlayer(data) {
 }
 
 function onReceiveEmoji(data) {
+    var fromPlayer = playerById(this.id);
+
+    if (!fromPlayer) {
+        console.log('Player not found: ' + this.id);
+        return
+    }
+
     console.log(data);
     var sentToPlayer = playerById(data.to);
 
@@ -79,7 +86,7 @@ function onReceiveEmoji(data) {
         return
     }
 
-    this.broadcast.emit('here is an emoji', {id: sentToPlayer.id, text: data.text});
+    this.broadcast.emit('here is an emoji', {id: sentToPlayer.id, from: fromPlayer.id, text: data.text});
 
 }
 
