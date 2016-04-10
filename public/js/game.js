@@ -1,8 +1,8 @@
 //here be globals
 var socket, space, player, otherPlayers, currentSpeed = 0, cursors;
 var text = null;
-var windowHeight = window.innerWidth - 25; // To prevent scrollbars.
-var windowWidth = window.innerWidth - 25; // To prevent scrollbars
+var windowHeight = window.innerHeight; // To prevent scrollbars.
+var windowWidth = window.innerWidth; // To prevent scrollbars.
 var publicText = '';
 var emojiOnScreen;
 var emojiPicker;
@@ -47,6 +47,8 @@ function create() {
 
     var startX = Math.round(Math.random() * worldSize);
     var startY = Math.round(Math.random() * worldSize);
+    startX = 0;
+    startY = 0;
     player = game.add.sprite(startX, startY, 'ship');
     player.anchor.setTo(0.5, 0.5);
     player.animations.add('move', [0, 1, 2, 3, 4, 5, 6, 7], 20, true);
@@ -80,16 +82,21 @@ function displayEmojiPicker(a, b) {
         var emojiPickerX = Math.floor(player.x + player.width / 2);
         var emojiPickerY = Math.floor(player.y + player.height / 2);
         emojiPicker = game.add.group();
+        emojiPicker.position.copyFrom(player.position);
         var emoji1 = pickAnEmojiForMe();
         var emoji2 = pickAnEmojiForMe();
-        var sprite1 = emojiPicker.create(emojiPickerX, emojiPickerY, 'emoji', emoji1);
-        var sprite2 = emojiPicker.create(emojiPickerX + gridOffset, emojiPickerY, 'emoji', emoji2);
+        var sprite1 = emojiPicker.create(player.width / 2, player.height / 2, 'emoji', emoji1);
+        var sprite2 = emojiPicker.create(player.width / 2 + gridOffset, player.height / 2, 'emoji', emoji2);
 
         //  Enables all kind of input actions on this image (click, etc)
         sprite1.inputEnabled = true;
         sprite2.inputEnabled = true;
         sprite1.events.onInputDown.addOnce(emojiPickerClicker, this, 0, emoji1, a, b);
         sprite2.events.onInputDown.addOnce(emojiPickerClicker, this, 0, emoji2, a, b);
+
+        emojiPicker.update = function() {
+            this.position.copyFrom(player);
+        }
     }
 }
 
