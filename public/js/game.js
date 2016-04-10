@@ -164,13 +164,19 @@ function onNewPlayer(data) {
 
 function onNewEmojiReceived(data) {
     var fromPlayer = playerById(data.from);
-
+    for (var y in otherPlayers) {
+        if (otherPlayers[y].player.name == data.from) {
+            ambientEmoji = game.add.sprite(otherPlayers[y].player.x, otherPlayers[y].player.y, 'emoji', data.text);
+            setTimeout(function () {ambientEmoji.destroy();}, 1000);
+            break;
+        }
+    }
     // Missing player
     if (!fromPlayer) {
         console.log('Player not found: ', data.from);
         return;
     }
-    
+
     if (data.id.indexOf(socket.io.engine.id) > -1) {
         emojiStory[emojiIndex] = game.add.sprite(0, 0, 'emoji', data.text);
 
