@@ -48,8 +48,6 @@ function create() {
 
     var startX = Math.round(Math.random() * worldSize);
     var startY = Math.round(Math.random() * worldSize);
-    startX = 0;
-    startY = 0;
     player = game.add.sprite(startX, startY, 'ship');
     player.anchor.setTo(0.5, 0.5);
     player.animations.add('move', [0, 1, 2, 3, 4, 5, 6, 7], 20, true);
