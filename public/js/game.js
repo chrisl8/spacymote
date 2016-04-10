@@ -11,6 +11,7 @@ var emojiStory = [];
 var emojiIndex = 0;
 var superText = null;
 var isInteracting = false;
+var corg = false; //this is the cheat thing
 
 // Returns a random integer between min (included) and max (excluded)
 // Using Math.round() will give you a non-uniform distribution!
@@ -195,8 +196,6 @@ function interact(a, b, emojiNumber) {
             text = game.add.sprite(0, 0, 'emoji', publicText);
             text.anchor.set(0.5);
             setTimeout(function () {
-                console.log('NOTICE ME SENPAI');
-                console.log(publicText);
                 text.destroy();
                 text = null;
                 publicText = '';
@@ -215,8 +214,25 @@ function update() {
             if (otherPlayers[i].text && otherTexts[i] == null && otherPlayers[i].text != 'new') {
                 blurb = otherPlayers[i].text;
                 emojiStory[emojiIndex] = game.add.sprite(0, 0, 'emoji', blurb);
-                emojiStory[emojiIndex].x = (emojiIndex * 65) + 32;
-                emojiStory[emojiIndex].y = 32;
+
+                    if((emojiIndex*65)+20 < game.width - 100) {
+                        emojiStory[emojiIndex].x = (emojiIndex * 65) + 20;
+                        emojiStory[emojiIndex].y = 32;
+                    } else if((emojiIndex*65)+20 < (game.width+game.height) - 100){
+                        console.log('two');
+                        emojiStory[emojiIndex].x = (game.width - 32);
+                        emojiStory[emojiIndex].y = ((emojiIndex * 65) - (game.width -70)+32);
+                    } else if((emojiIndex*65)+20 < ((game.width*2)+game.height) - 100){
+                        console.log('three');
+                        emojiStory[emojiIndex].x = ((emojiIndex * 65) + 20)-(game.width + game.height);
+                        emojiStory[emojiIndex].y = game.height - 32;
+                    } else if((emojiIndex*65)+20 < ((game.width*2)+(game.height*2)) -100){
+                        console.log('four');
+                        emojiStory[emojiIndex].x = 32;
+                        emojiStory[emojiIndex].y = ((emojiIndex * 65) - (2*game.width + game.height)) ;
+//                        emojiStory[emojiIndex].y = ((emojiIndex * 65) - (game.width -70)-(game.height+(2*game.width)));
+                    } else {console.log('Notice me, Senpai!');}
+
                 emojiStory[emojiIndex].fixedToCamera = true;
                 emojiIndex++;
                 
