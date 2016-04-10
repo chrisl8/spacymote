@@ -48,6 +48,8 @@ function create() {
 
     var startX = Math.round(Math.random() * worldSize);
     var startY = Math.round(Math.random() * worldSize);
+    startX = 0;
+    startY = 0;
     player = game.add.sprite(startX, startY, 'ship');
     player.anchor.setTo(0.5, 0.5);
     player.animations.add('move', [0, 1, 2, 3, 4, 5, 6, 7], 20, true);
@@ -118,7 +120,6 @@ function displayEmojiPicker(a, b) {
 function emojiPickerClicker (context, otherThing, emojiNumber, a, b) {
 
     interact(a, b, emojiNumber)
-    console.log(emojiNumber);
     emojiPicker.destroy();
     emojiPickerActive = false;
 }
@@ -129,6 +130,7 @@ var setEventHandlers = function() {
     socket.on('new player', onNewPlayer);
     socket.on('move player', onMovePlayer);
     socket.on('remove player', onRemovePlayer);
+    socket.on('here is an emoji', onNewEmojiReceived);
 };
 
 function onSocketConnected() {
@@ -140,7 +142,7 @@ function onSocketConnected() {
     });
     otherPlayers = [];
 
-    socket.emit('new player', {x: player.x, y: player.y, text: publicText});
+    socket.emit('new player', {x: player.x, y: player.y});
 }
 
 function onSocketDisconnect() {
@@ -161,6 +163,12 @@ function onNewPlayer(data) {
     otherPlayers.push(new RemotePlayer(data.id, game, player, data.x, data.y));
 }
 
+function onNewEmojiReceived(data) {
+    if (data.id.indexOf(socket.io.engine.id) > -1) {
+        console.log(data.text);
+    }
+}
+
 function onMovePlayer(data) {
     var movePlayer = playerById(data.id);
 
@@ -172,8 +180,6 @@ function onMovePlayer(data) {
 
     movePlayer.player.x = data.x;
     movePlayer.player.y = data.y;
-    movePlayer.text = data.text;
-//    console.log(movePlayer.text);
 }
 
 function onRemovePlayer(data) {
@@ -191,14 +197,12 @@ function onRemovePlayer(data) {
 }
 function interact(a, b, emojiNumber) {
         if(!isInteracting) {
-            console.log('interaction');
-            publicText = emojiNumber;
-            text = game.add.sprite(0, 0, 'emoji', publicText);
+            socket.emit('send emoji', {to: b.name, text: emojiNumber});
+            text = game.add.sprite(0, 0, 'emoji', emojiNumber);
             text.anchor.set(0.5);
             setTimeout(function () {
                 text.destroy();
                 text = null;
-                publicText = '';
                 isInteracting = false;
             }, 1000);
         }
@@ -210,7 +214,6 @@ function update() {
         if (otherPlayers[i].alive) {
             otherPlayers[i].update();
             game.physics.arcade.collide(player, otherPlayers[i].player, displayEmojiPicker);
-//            console.log(otherPlayers[i].text + i);
             if (otherPlayers[i].text && otherTexts[i] == null && otherPlayers[i].text != 'new') {
                 blurb = otherPlayers[i].text;
                 emojiStory[emojiIndex] = game.add.sprite(0, 0, 'emoji', blurb);
@@ -285,7 +288,7 @@ function update() {
         }
     }
 
-    socket.emit('move player', {x: player.x, y: player.y, text: publicText});
+    socket.emit('move player', {x: player.x, y: player.y});
 }
 
 function render() {
