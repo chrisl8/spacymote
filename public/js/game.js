@@ -63,7 +63,7 @@ function create() {
     player.bringToTop();
 
     game.camera.follow(player);
-    game.camera.deadzone = new Phaser.Rectangle(150, 150, 500, 300);
+    game.camera.deadzone = new Phaser.Rectangle(windowWidth/4, windowHeight/4, windowWidth/2, windowHeight/2);
     game.camera.focusOnXY(0, 0);
 
     cursors = game.input.keyboard.createCursorKeys();
