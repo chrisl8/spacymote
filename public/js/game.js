@@ -1,16 +1,12 @@
-//here be globals
+'use strict';
 var socket, space, player, currentSpeed = 0, cursors;
 var otherPlayers = [];
 var text = null;
 var windowHeight = window.innerHeight; // To prevent scrollbars.
 var windowWidth = window.innerWidth; // To prevent scrollbars.
-var publicText = '';
-var emojiOnScreen;
 var emojiPicker;
-var otherTexts = [];
 var emojiStory = [];
 var emojiIndex = 0;
-var superText = null;
 var isInteracting = false;
 
 // Returns a random integer between min (included) and max (excluded)
@@ -117,7 +113,7 @@ function displayEmojiPicker(a, b) {
 
 function emojiPickerClicker(context, otherThing, emojiNumber, a, b) {
 
-    interact(a, b, emojiNumber)
+    interact(a, b, emojiNumber);
     emojiPicker.destroy();
     emojiPickerActive = false;
 }
@@ -166,7 +162,7 @@ function onNewEmojiReceived(data) {
     var fromPlayer = playerById(data.from);
     for (var y in otherPlayers) {
         if (otherPlayers[y].player.name == data.from) {
-            ambientEmoji = game.add.sprite(otherPlayers[y].player.x, otherPlayers[y].player.y, 'emoji', data.text);
+            var ambientEmoji = game.add.sprite(otherPlayers[y].player.x, otherPlayers[y].player.y, 'emoji', data.text);
             setTimeout(function () {ambientEmoji.destroy();}, 1000);
             break;
         }
