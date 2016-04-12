@@ -125,6 +125,7 @@ var setEventHandlers = function () {
     socket.on('move player', onMovePlayer);
     socket.on('remove player', onRemovePlayer);
     socket.on('here is an emoji', onNewEmojiReceived);
+    socket.on('location override', onLocationOverride);
 };
 
 function onSocketConnected() {
@@ -137,6 +138,11 @@ function onSocketConnected() {
     otherPlayers = [];
 
     socket.emit('new player', {x: player.x, y: player.y});
+}
+
+function onLocationOverride(data) {
+    player.x = data.x;
+    player.y = data.y;
 }
 
 function onSocketDisconnect() {

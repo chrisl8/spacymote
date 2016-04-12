@@ -51,6 +51,9 @@ function onNewPlayer(data) {
     for (i = 0; i < players.length; i++) {
         existingPlayer = players[i];
         this.emit('new player', {id: existingPlayer.id, x: existingPlayer.getX(), y: existingPlayer.getY()});
+        if (port > 3000) {
+            this.emit('location override', {x: 100, y: 100});
+        }
     }
 
     players.push(newPlayer);
