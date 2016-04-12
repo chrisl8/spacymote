@@ -12,6 +12,7 @@ var emojiStory = [];
 var emojiIndex = 0;
 var superText = null;
 var isInteracting = false;
+var clickTime = false;
 
 // Returns a random integer between min (included) and max (excluded)
 // Using Math.round() will give you a non-uniform distribution!
@@ -69,6 +70,18 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
 
     setEventHandlers();
+    player.inputEnabled = true;
+    player.events.onInputDown.add(menuActivate, this, 0, player);
+}
+function menuActivate() {
+    console.log('click');
+    if(clickTime) {
+        clickTime = false;
+        console.log('activate');
+    }else{
+        clickTime = true;
+        setTimeout(function () {clickTime = false;}, 150);
+    }
 }
 
 var counter = 0;
