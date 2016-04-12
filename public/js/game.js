@@ -141,6 +141,7 @@ function onSocketConnected() {
 }
 
 function onLocationOverride(data) {
+    console.log(data);
     player.x = data.x;
     player.y = data.y;
 }
