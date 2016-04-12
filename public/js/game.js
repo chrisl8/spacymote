@@ -191,22 +191,12 @@ function onNewEmojiReceived(data) {
             console.log('four');
             emojiStory[emojiIndex].x = 32;
             emojiStory[emojiIndex].y = ((emojiIndex * 65) - (2 * game.width + game.height));
-//                        emojiStory[emojiIndex].y = ((emojiIndex * 65) - (game.width -70)-(game.height+(2*game.width)));
         } else {
             console.log('Notice me, Senpai!');
         }
 
         emojiStory[emojiIndex].fixedToCamera = true;
         emojiIndex++;
-
-    //     var i = 1;
-    //     otherTexts[i] = game.add.sprite(0, 0, 'emoji', data.text);
-    //     otherTexts[i].anchor.set(0.5);
-    //     otherTexts[i].x = Math.floor(fromPlayer.player.x + fromPlayer.player.width / 2);
-    //     otherTexts[i].y = Math.floor(fromPlayer.player.y + fromPlayer.player.height / 2);
-    // } else if (otherTexts[i] != null && fromPlayer.text == '') {
-    //     otherTexts[i].destroy();
-    //     otherTexts[i] = null;
     }
 }
 
