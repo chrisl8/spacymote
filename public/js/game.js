@@ -8,6 +8,8 @@ var emojiPicker;
 var emojiStory = [];
 var emojiIndex = 0;
 var isInteracting = false;
+var clickTime = false;
+var menu = null;
 
 // Returns a random integer between min (included) and max (excluded)
 // Using Math.round() will give you a non-uniform distribution!
@@ -65,6 +67,40 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
 
     setEventHandlers();
+    player.inputEnabled = true;
+    player.events.onInputDown.add(menuActivate, this, 0, player);
+}
+function menuClick(a, b, button, c) {
+    setTimeout(function () {emojiPickerActive = false;}, 50);
+    if (button == 'wipe') {
+        for (emoji in emojiStory) {
+            emojiStory[emoji].destroy();
+        }
+        emojiIndex = 0;
+    }
+    menu.destroy();
+}
+function menuActivate() {
+    if(clickTime && emojiPickerActive == false) {
+        clickTime = false;
+        menu = game.add.group();
+        menu.position.copyFrom(player.position);
+        var saveButton = menu.create(player.width / 2, player.height / 2, 'emoji', 51);
+        var wipeButton = menu.create(player.width / 2 + 70, player.height / 2, 'emoji', 60);
+
+        emojiPickerActive = true;//makes both pop up menus mutually exclusive
+        saveButton.inputEnabled = true;
+        wipeButton.inputEnabled = true;
+        saveButton.events.onInputDown.addOnce(menuClick, this, 0, 'save');
+        wipeButton.events.onInputDown.addOnce(menuClick, this, 0, 'wipe');
+
+        menu.update = function () {
+            this.position.copyFrom(player);
+        }
+    }else{
+        clickTime = true;
+        setTimeout(function () {clickTime = false;}, 150);
+    }
 }
 
 var counter = 0;
@@ -115,7 +151,7 @@ function emojiPickerClicker(context, otherThing, emojiNumber, a, b) {
 
     interact(a, b, emojiNumber);
     emojiPicker.destroy();
-    emojiPickerActive = false;
+    setTimeout(function () {emojiPickerActive = false;}, 50);
 }
 
 var setEventHandlers = function () {
@@ -289,8 +325,9 @@ function update() {
     space.tilePosition.x = -game.camera.x;
     space.tilePosition.y = -game.camera.y;
 
-    if (game.input.activePointer.isDown) {
+    if (game.input.activePointer.isDown && !emojiPickerActive) {
         //TODO make this better (bounce around the cursor) (actually teh bounce is feature)
+        //TODO disable click to move when menu is open
         if (game.physics.arcade.distanceToPointer(player) >= 10) {
             currentSpeed = 300;
             player.rotation = game.physics.arcade.angleToPointer(player);
