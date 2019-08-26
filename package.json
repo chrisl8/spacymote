@@ -10,9 +10,9 @@
   "author": "Chris L8",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.13.4",
-    "phaser": "^2.4.6",
-    "socket.io": "^1.4.5"
+    "express": "4.17.1",
+    "phaser": "2.13.1",
+    "socket.io": "2.2.0"
   },
   "devDependencies": {
     "nodemon": "1.19.1"
