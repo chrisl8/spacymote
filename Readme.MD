@@ -1,18 +1,9 @@
 SpacyMote!
 ==========
 
-The production server for this project is at spacymote.space. This server should
-contain the most up to date and hopefully stable version.
+You can play this game at: https://spacymote.ekpyroticfrood.net/
 
-TODO: since this project is a little small for issue tracking, the status of the project will b documented here.
-
-1. fix the emoji story wrapping
-
-2. enable the export button
-
-3. replace the clear and export buttons with images or imojis that look like that would mean clear/export
-
-I think at this point we can consider this project to be feature complete. If we decide to add stuff we can all it V2.
+This is a silly old multiplayer game we built with Phaser one day for fun.
 
 Created for the DevICT Game Demo Day April 9th, 2016.
 
