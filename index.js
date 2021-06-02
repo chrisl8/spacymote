@@ -10,7 +10,7 @@ app.use(express.static(__dirname + '/public'));
 var port = process.env.PORT || 3000;
 var webServer = app.listen(port);
 // with Socket.io!
-var socket = require('socket.io').listen(webServer);
+var socket = require('socket.io')(webServer);
 
 socket.sockets.on('connection', onSocketConnection);
 
